@@ -14,7 +14,7 @@
         "spatie/laravel-sluggable": "^3.4"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.7",
+        "barryvdh/laravel-debugbar": "^3.8",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "fakerphp/faker": "^1.20",
         "kkomelin/laravel-translatable-string-exporter": "^1.17",

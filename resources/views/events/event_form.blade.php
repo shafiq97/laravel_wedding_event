@@ -70,7 +70,7 @@
                         :value="isset($service) ? $service->organizations->pluck('id')->toArray() : []" :valuesToInt="true" />
                 </x-form.row>
                 <x-form.row>
-                    <x-form.label for="parent_event_id">{{ __('Part of the service') }}</x-form.label>
+                    <x-form.label for="parent_event_id">{{ __('Part of the venue') }}</x-form.label>
                     <x-form.select name="parent_event_id" :options="$services->except($service->id ?? null)->pluck('name', 'id')" :value="$service->parent_event_id ?? null">
                         <option value="">{{ __('none') }}</option>
                     </x-form.select>

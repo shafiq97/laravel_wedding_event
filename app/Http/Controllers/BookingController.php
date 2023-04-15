@@ -22,8 +22,8 @@ class BookingController extends Controller
     use StreamsExport;
 
     public function index(
-        Service              $service,
-        BookingOption        $bookingOption,
+        Service $service,
+        BookingOption $bookingOption,
         BookingFilterRequest $request
     ): StreamedResponse|View {
         $bookingOption->load([
@@ -69,11 +69,24 @@ class BookingController extends Controller
     {
         $this->authorize('book', $bookingOption);
 
+        // Check if a booking has already been made for the same date and the same booking option
+        $existingBooking = Booking::where('booking_option_id', $bookingOption->id)
+            ->whereDate('booked_at', date('Y-m-d'))
+            ->first();
+
+        // dd(date('Y-m-d'));
+
+        if ($existingBooking) {
+            $message = __('A booking for this date already exists.');
+            Session::flash('error', $message);
+            return back();
+        }
+
         $booking = new Booking();
         $booking->bookingOption()->associate($bookingOption);
         $booking->price = $bookingOption->price;
         $booking->bookedByUser()->associate(Auth::user());
-        $booking->booked_at = Carbon::now();
+        $booking->booked_at = Carbon::parse($request->input('booked_at'));
 
         if ($booking->fillAndSave($request->validated())) {
             $message = __('Your booking has been saved successfully.')
@@ -93,6 +106,7 @@ class BookingController extends Controller
 
         return back();
     }
+
 
     public function edit(Booking $booking): View
     {
